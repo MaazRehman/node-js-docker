@@ -1,4 +1,4 @@
-sudo apt  install docker.io
+Install docker on your operating system and follow the steps.
 
 
 mkdir automation_testing
@@ -6,30 +6,46 @@ cd automation_testing
 
 npm init
 sudo npm install express --save
-sudo npm install jasmine --save
 sudo npm install request --save
-npm install jasmine-expect --save
 
 vi index.js
-	var express = require('express')
-	var app = express()
+		let express = require('express');
+		let request = require("request");
 
-	app.get('/', function (req, res) {
-	  res.send('Hello World!')
-	})
+		const app = express();
+		const PORT = 30402;
 
-	app.listen(30402, function () {
-	  console.log('app listening on port 30402!')
-	})
+		app.get('/',  (req, res) => {
+		  res.send('Hello World!');
+		});
+
+
+		app.get('/test',   (req, res) => {
+		       request(`http://localhost:${PORT}/`,  (error, response) => {
+			 return assertResponseCodeToBe200(response) ?
+			    res.send('All good') :
+			    res.send('Status code was not 200, abort abort !');
+		      });
+
+		});
+
+		const assertResponseCodeToBe200 = (response) => {
+		  return (typeof response !== 'undefined' &&  response.statusCode === 200);
+		};
+
+		app.listen(PORT, function () {
+		  console.log(`App listening on port ${PORT}!`)
+		});
+
 
 vi Dockerfile
-	FROM node:7
-	WORKDIR /app
-	COPY package.json /app
-	RUN npm install
-	COPY . /app
-	CMD node index.js
-	EXPOSE 30402
+		FROM node:7
+		WORKDIR /app
+		COPY package.json /app
+		RUN npm install
+		COPY . /app
+		CMD node index.js
+		EXPOSE 30402
 
 
 sudo docker build -t automation_testing .
