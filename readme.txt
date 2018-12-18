@@ -4,11 +4,10 @@ Install docker on your operating system and follow the steps.
 mkdir automation_testing
 cd automation_testing
 
-npm init
-sudo npm install express --save
-sudo npm install request --save
+Clone the project and run the following command to install dependencies.
+sudo npm install
 
-vi index.js
+sudo vi index.js
 		let express = require('express');
 		let request = require("request");
 
@@ -38,7 +37,7 @@ vi index.js
 		});
 
 
-vi Dockerfile
+sudo vi Dockerfile
 		FROM node:7
 		WORKDIR /app
 		COPY package.json /app
